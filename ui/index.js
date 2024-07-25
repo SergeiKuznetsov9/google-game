@@ -1,4 +1,3 @@
-// чтобы ES модули работали в браузере нужно обязательно добавлять расширение импорту
 import { getGooglePoints, getPlayerPoints } from "../core/state-manager.js";
 
 const googlePoints = getGooglePoints();
