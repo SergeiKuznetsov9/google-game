@@ -1,11 +1,16 @@
 import {
   getGooglePoints,
   getPlayerPoints,
+  subscribe,
 } from "../../../core/state-manager.js";
 
 export const ResultPanelComponent = () => {
   const element = document.createElement("div");
   element.classList.add("resultPanelComponent");
+
+  subscribe(() => {
+    render(element);
+  });
 
   render(element);
 
@@ -13,6 +18,7 @@ export const ResultPanelComponent = () => {
 };
 
 const render = async (element) => {
+  element.innerHTML = "";
   const googlePoints = await getGooglePoints();
   const player1Points = await getPlayerPoints(1);
   const player2Points = await getPlayerPoints(2);

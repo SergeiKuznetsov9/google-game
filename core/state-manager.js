@@ -142,15 +142,14 @@ export const playAgain = async () => {
  */
 export const getPlayerPoints = async (playerNumber) => {
   const playerIndex = _getPlayerIndexByNumber(playerNumber);
-
   return _state.points.players[playerIndex];
 };
 
 export const getGridSize = async () => ({ ..._state.settings.gridSize });
 
 export const getGooglePosition = async () => ({ ..._state.positions.google });
+
 export const getPlayerPosition = async (playerNumber) => {
   const playerIndex = _getPlayerIndexByNumber(playerNumber);
-
   return { ..._state.positions.players[playerIndex] };
 };
