@@ -1,5 +1,3 @@
-import { renderApp } from "../ui/index.js";
-
 const _state = {
   settings: {
     gridSize: {
@@ -34,9 +32,15 @@ const _getPlayerIndexByNumber = (playerNumber) => {
 };
 
 setInterval(() => {
-  _state.positions.google = { x: 2, y: 2 };
-  renderApp();
+  _state.positions.google = { x: 3, y: 1 };
+  _observer();
 }, 1000);
+
+// OBSERVER
+let _observer = () => {};
+export const subscribe = (observer) => {
+  _observer = observer;
+};
 
 // INTERFACE ADAPTER
 export const getGooglePoints = async () => _state.points.google;
