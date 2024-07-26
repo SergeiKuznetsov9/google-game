@@ -5,14 +5,16 @@ const _state = {
   },
 };
 
-export const getGooglePoints = () => _state.points.google;
+// Очень вероятно, что данные сведения в последующем будут поступать с из вне.
+// желательно сделать эту функцию асинхронной
+export const getGooglePoints = async () => _state.points.google;
 
 /**
  *
  * @param {number} playerNumber - one-based index of player
- * @returns {number} number of points
+ * @returns {Promise} number of points
  */
-export const getPlayerPoints = (playerNumber) => {
+export const getPlayerPoints = async (playerNumber) => {
   const playerIndex = playerNumber - 1;
 
   if (playerIndex < 0 || playerIndex > _state.points.players.length - 1) {
