@@ -4,6 +4,7 @@ const _state = {
       rowsCount: 4,
       columnsCount: 4,
     },
+    googleJumpInterval: 1000,
   },
   positions: {
     google: {
@@ -52,11 +53,46 @@ const _getPlayerIndexByNumber = (playerNumber) => {
   return playerIndex;
 };
 
+const _generateIntegerNumber = (min, max) => {
+  return Math.floor(Math.random() * (max - min)) + min;
+};
+
+const _jumpGoogleToNewPosition = () => {
+  const newPosition = { x: null, y: null };
+
+  do {
+    newPosition.x = _generateIntegerNumber(
+      0,
+      _state.settings.gridSize.columnsCount
+    );
+    newPosition.y = _generateIntegerNumber(
+      0,
+      _state.settings.gridSize.columnsCount
+    );
+
+    var isNewPositionMatchWithCurrentGooglePosition =
+      newPosition.x === _state.positions.google.x &&
+      newPosition.y === _state.positions.google.y;
+    var isNewPositionMatchWithCurrentPlayer1Position =
+      newPosition.x === _state.positions.players[0].x &&
+      newPosition.y === _state.positions.players[0].y;
+    var isNewPositionMatchWithCurrentPlayer2Position =
+      newPosition.x === _state.positions.players[1].x &&
+      newPosition.y === _state.positions.players[1].y;
+  } while (
+    isNewPositionMatchWithCurrentGooglePosition ||
+    isNewPositionMatchWithCurrentPlayer1Position ||
+    isNewPositionMatchWithCurrentPlayer2Position
+  );
+
+  _state.positions.google = newPosition;
+};
+
 setInterval(() => {
-  _state.positions.google = { x: 3, y: 1 };
+  _jumpGoogleToNewPosition();
   _notifyObservers();
   _state.points.google++;
-}, 1000);
+}, _state.settings.googleJumpInterval);
 
 // INTERFACE ADAPTER
 export const getGooglePoints = async () => _state.points.google;
