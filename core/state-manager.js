@@ -1,4 +1,14 @@
+// Приступим к реализации игрового поля
+// Для этого сконцентрируемся на данных. А в дальнейшем уже на их основе
+// будем рисовать сетку
+
 const _state = {
+  settings: {
+    gridSize: {
+      rowsCount: 4,
+      columnsCount: 4,
+    },
+  },
   points: {
     google: 12,
     players: [10, 11],
@@ -20,3 +30,7 @@ export const getPlayerPoints = async (playerNumber) => {
   }
   return _state.points.players[playerIndex];
 };
+
+// Вернем копию, чтобы в случае изменения объекта с наружи, здесь ничего не
+// изменилось
+export const getGridSize = async () => ({ ..._state.settings.gridSize });

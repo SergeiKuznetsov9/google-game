@@ -5,7 +5,7 @@ import {
 
 export const ResultPanelComponent = () => {
   const element = document.createElement("div");
-  element.classList.add("result-panel");
+  element.classList.add("resultPanelComponent");
 
   render(element);
 
