@@ -1,6 +1,5 @@
 import { getGooglePoints, getPlayerPoints } from "../../core/state-manager.js";
 
-// Так уже лучше - логика по созданию компонента перенесена в отдельный модуль
 export const AppComponent = () => {
   const element = document.createElement("div");
 
