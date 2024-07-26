@@ -6,14 +6,6 @@ import { ResultPanelComponent } from "./ResultPanel/ResultPanel.component.js";
 import { SettingsComponent } from "./Settings/Settings.component.js";
 import { StartComponent } from "./Start/Start.component.js";
 
-// Сейчас у приложения существует одна проблема - постоянный перерендер всего изображения
-// Оптимизиция будет заключаться именно в том, чтобы выполнять перерендер только тогда,
-// когда это действительно нужно.
-
-// Вот этот компонент должен перерендериться только в случае изменения gameStatus
-// В другом случае достаточно будет перерендерить другие компоненты
-
-// Для того, чтобы это реализовать сделаем нечто похожее на локальное состояние
 export const AppComponent = () => {
   const localState = { prevGameStatus: null };
 
