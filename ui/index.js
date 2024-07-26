@@ -1,7 +1,11 @@
 import { AppComponent } from "./components/App.component.js";
 
 const rootElement = document.getElementById("root");
-rootElement.innerHTML = "";
-const appComponent = AppComponent();
 
-rootElement.append(appComponent.element);
+export const renderApp = () => {
+  rootElement.innerHTML = "";
+  const appComponent = AppComponent();
+  rootElement.append(appComponent.element);
+};
+
+renderApp();

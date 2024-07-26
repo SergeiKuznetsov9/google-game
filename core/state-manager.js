@@ -1,3 +1,5 @@
+import { renderApp } from "../ui/index.js";
+
 const _state = {
   settings: {
     gridSize: {
@@ -30,6 +32,23 @@ const _getPlayerIndexByNumber = (playerNumber) => {
 
   return playerIndex;
 };
+
+// Теперь заставим гугл двигаться. Эта задача вот этого слоя
+// С этой целью будем менять координаты, а также делать перерендер приложения,
+// импортировав сюда функцию рендера из index.js
+
+// Теперь это все работает, но имеется один очень существенный недостаток:
+// index.js опосредованно использует state-manager, а state-manager напрямую
+// использует index.js. Это циклическая зависимость и так быть не должно.
+// Потенциально это может принести проблемы и от этого нужно избавиться.
+// ВСЕ ЗАВИСИМОСТИ ДОЛЖНЫ БЫТЬ ОДНОНАПРАВЛЕНЫ
+
+// Для решения этой проблемы еобходимо реализовать патерн observer
+
+setInterval(() => {
+  _state.positions.google = { x: 2, y: 2 };
+  renderApp();
+}, 1000);
 
 // INTERFACE ADAPTER
 export const getGooglePoints = async () => _state.points.google;
