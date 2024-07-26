@@ -5,6 +5,8 @@ const _state = {
       columnsCount: 4,
     },
     googleJumpInterval: 1000,
+    pointsToLose: 5,
+    pointsToWin: 5,
   },
   positions: {
     google: {
@@ -17,8 +19,8 @@ const _state = {
     ],
   },
   points: {
-    google: 12,
-    players: [10, 11],
+    google: 0,
+    players: [0, 0],
   },
 };
 
@@ -60,6 +62,10 @@ const _generateIntegerNumber = (min, max) => {
 const _jumpGoogleToNewPosition = () => {
   const newPosition = { x: null, y: null };
 
+  let isNewPositionMatchWithCurrentGooglePosition;
+  let isNewPositionMatchWithCurrentPlayer1Position;
+  let isNewPositionMatchWithCurrentPlayer2Position;
+
   do {
     newPosition.x = _generateIntegerNumber(
       0,
@@ -70,13 +76,13 @@ const _jumpGoogleToNewPosition = () => {
       _state.settings.gridSize.columnsCount
     );
 
-    var isNewPositionMatchWithCurrentGooglePosition =
+    isNewPositionMatchWithCurrentGooglePosition =
       newPosition.x === _state.positions.google.x &&
       newPosition.y === _state.positions.google.y;
-    var isNewPositionMatchWithCurrentPlayer1Position =
+    isNewPositionMatchWithCurrentPlayer1Position =
       newPosition.x === _state.positions.players[0].x &&
       newPosition.y === _state.positions.players[0].y;
-    var isNewPositionMatchWithCurrentPlayer2Position =
+    isNewPositionMatchWithCurrentPlayer2Position =
       newPosition.x === _state.positions.players[1].x &&
       newPosition.y === _state.positions.players[1].y;
   } while (
@@ -88,10 +94,17 @@ const _jumpGoogleToNewPosition = () => {
   _state.positions.google = newPosition;
 };
 
-setInterval(() => {
+let googleJumpInterval;
+
+googleJumpInterval = setInterval(() => {
   _jumpGoogleToNewPosition();
-  _notifyObservers();
   _state.points.google++;
+
+  _notifyObservers();
+
+  if (_state.points.google === _state.settings.pointsToLose) {
+    clearInterval(googleJumpInterval);
+  }
 }, _state.settings.googleJumpInterval);
 
 // INTERFACE ADAPTER
