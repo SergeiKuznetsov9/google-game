@@ -7,9 +7,6 @@ export const ResultPanelComponent = () => {
   const element = document.createElement("div");
   element.classList.add("result-panel");
 
-  // Чтобы не делать весь компонент асинхронным, сделаем отдельно внутри их
-  // асинхронные функции, которые будут получать данные
-
   const render = async () => {
     const googlePoints = await getGooglePoints();
     const player1Points = await getPlayerPoints(1);
