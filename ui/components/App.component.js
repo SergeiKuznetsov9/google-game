@@ -1,15 +1,18 @@
-import { getGooglePoints, getPlayerPoints } from "../../core/state-manager.js";
+import { GridComponent } from "./Grid/Grid.component.js";
+import { ResultPanelComponent } from "./ResultPanel/ResultPanel.component.js";
+import { SettingsComponent } from "./Settings/Settings.component.js";
+
+// Так уже лучше, но тоже не хорошо, т.к. этот компонент призван быть нейким агрегатором
+// всего приложения, т.е. склеивать воедино более мелкие крипичики. Реализуем:
 
 export const AppComponent = () => {
   const element = document.createElement("div");
 
-  const googlePoints = getGooglePoints();
-  const player1Points = getPlayerPoints(1);
-  const player2Points = getPlayerPoints(2);
+  const settingsElement = SettingsComponent();
+  const resultPanelElement = ResultPanelComponent();
+  const gridElement = GridComponent();
 
-  element.append(
-    `Player1: ${player1Points}, Player2: ${player2Points}, Google: ${googlePoints}`
-  );
+  element.append(settingsElement, resultPanelElement, gridElement);
 
   return element;
 };
