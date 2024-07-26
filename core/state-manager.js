@@ -21,6 +21,27 @@ const _state = {
   },
 };
 
+// OBSERVERS
+let _observers = [];
+
+export const subscribe = (observer) => {
+  _observers.push(observer);
+};
+
+export const unsubscribe = (observer) => {
+  _observers = _observers.filter((o) => o !== observer);
+};
+
+const _notifyObservers = () =>
+  _observers.forEach((o) => {
+    try {
+      o();
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+// PRIVATE METHODS
 const _getPlayerIndexByNumber = (playerNumber) => {
   const playerIndex = playerNumber - 1;
 
@@ -33,14 +54,9 @@ const _getPlayerIndexByNumber = (playerNumber) => {
 
 setInterval(() => {
   _state.positions.google = { x: 3, y: 1 };
-  _observer();
+  _notifyObservers();
+  _state.points.google++;
 }, 1000);
-
-// OBSERVER
-let _observer = () => {};
-export const subscribe = (observer) => {
-  _observer = observer;
-};
 
 // INTERFACE ADAPTER
 export const getGooglePoints = async () => _state.points.google;
