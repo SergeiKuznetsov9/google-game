@@ -1,17 +1,26 @@
-import { getGridSize, subscribe } from "../../../core/state-manager.js";
+import {
+  getGridSize,
+  subscribe,
+  unsubscribe,
+} from "../../../core/state-manager.js";
 import { CellComponent } from "./Cell/Cell.component.js";
 
 export const GridComponent = () => {
   const element = document.createElement("table");
   element.classList.add("gridComponent");
 
-  subscribe(() => {
+  // Для отписки от вызова (чтобы подписи не аккумулировались) вынесем в
+  // отдельную перемнную подписку
+  const observer = () => {
     render(element);
-  });
+  };
+  subscribe(observer);
 
   render(element);
 
-  return { element };
+  return { element, cleanUp: () => unsubscribe(observer) };
+  // Теперь родитель может вызвать cleanup функцию. Именно родитель управляет
+  // этим компонентом
 };
 
 const render = async (element) => {
