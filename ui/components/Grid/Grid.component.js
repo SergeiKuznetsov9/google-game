@@ -1,25 +1,26 @@
-import {
-  getGridSize,
-  subscribe,
-  unsubscribe,
-} from "../../../core/state-manager.js";
+import { getGridSize } from "../../../core/state-manager.js";
 import { CellComponent } from "./Cell/Cell.component.js";
 
 export const GridComponent = () => {
+  const localState = { cleanupFunctions: [] };
+
   const element = document.createElement("table");
   element.classList.add("gridComponent");
 
-  const observer = () => {
-    render(element);
+  render(element, localState);
+
+  return {
+    element,
+    cleanUp: () => {
+      localState.cleanupFunctions.forEach((cf) => cf());
+    },
   };
-  subscribe(observer);
-
-  render(element);
-
-  return { element, cleanUp: () => unsubscribe(observer) };
 };
 
-const render = async (element) => {
+const render = async (element, localState) => {
+  localState.cleanupFunctions.forEach((cf) => cf());
+  localState.cleanupFunctions = [];
+
   element.innerHTML = "";
 
   const gridSize = await getGridSize();
@@ -29,6 +30,7 @@ const render = async (element) => {
 
     for (let x = 0; x < gridSize.columnsCount; x++) {
       const cellComponent = CellComponent(x, y);
+      localState.cleanupFunctions.push(cellComponent.cleanUp);
       rowElement.append(cellComponent.element);
     }
 

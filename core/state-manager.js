@@ -1,4 +1,14 @@
-import { GAME_STATUSES } from "../constants/constants.js";
+// Для оптимизации перерисовки клетки можно воспользоваться паттерном из предыдущего комита,
+// Однако это сложновато, учитывая, что в клетке может быть много состояний - пустота,
+// player1, player2, google. Проще сделать другим способом. Введем типы событий
+
+// Вызывая подписчика, мы можем передать ему что-нибудь аргументом. Это аналогично объекту
+// события
+
+// Таким образом, сформируем объект event с названием и пэйлоудом и в сгбскрайбах на основании
+// этой информации будем решать нужен ли перерендер или нет
+
+import { EVENTS, GAME_STATUSES } from "../constants/constants.js";
 
 const _state = {
   gameStatus: GAME_STATUSES.SETTINGS,
@@ -38,14 +48,16 @@ export const unsubscribe = (observer) => {
   _observers = _observers.filter((o) => o !== observer);
 };
 
-const _notifyObservers = () =>
+const _notifyObservers = (name, payload = {}) => {
+  const event = { name, payload };
   _observers.forEach((o) => {
     try {
-      o();
+      o(event);
     } catch (error) {
       console.error(error);
     }
   });
+};
 
 // PRIVATE METHODS
 const _getPlayerIndexByNumber = (playerNumber) => {
@@ -115,24 +127,32 @@ export const start = async () => {
   _state.points.players = [0, 0];
 
   googleJumpInterval = setInterval(() => {
+    const oldPosition = _state.positions.google;
+
     _jumpGoogleToNewPosition();
+
+    _notifyObservers(EVENTS.GOOGLE_JUMPED, {
+      oldPosition,
+      newPosition: _state.positions.google,
+    });
+
     _state.points.google++;
+    _notifyObservers(EVENTS.SCORES_CHANGED);
 
     if (_state.points.google === _state.settings.pointsToLose) {
       clearInterval(googleJumpInterval);
       _state.gameStatus = GAME_STATUSES.LOSE;
+      _notifyObservers(EVENTS.STATUS_CHANGED);
     }
-
-    _notifyObservers();
   }, _state.settings.googleJumpInterval);
-  _state.gameStatus = GAME_STATUSES.IN_PROGRESS;
 
-  _notifyObservers();
+  _state.gameStatus = GAME_STATUSES.IN_PROGRESS;
+  _notifyObservers(EVENTS.STATUS_CHANGED);
 };
 
 export const playAgain = async () => {
   _state.gameStatus = GAME_STATUSES.SETTINGS;
-  _notifyObservers();
+  _notifyObservers(EVENTS.STATUS_CHANGED);
 };
 
 /**
