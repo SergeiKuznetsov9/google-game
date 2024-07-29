@@ -1,5 +1,6 @@
 import { GAME_STATUSES } from "../../constants/constants.js";
 import { getGameStatus, subscribe } from "../../core/state-manager.js";
+import { AudioComponent } from "./Audio/Audio.component.js";
 import { GridComponent } from "./Grid/Grid.component.js";
 import { LoseComponent } from "./Lose/Lose.component.js";
 import { ResultPanelComponent } from "./ResultPanel/ResultPanel.component.js";
@@ -11,6 +12,8 @@ export const AppComponent = () => {
   const localState = { prevGameStatus: null, cleanupFunctions: [] };
 
   const element = document.createElement("div");
+
+  AudioComponent();
 
   subscribe(() => {
     render(element, localState);
