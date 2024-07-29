@@ -1,6 +1,7 @@
 import {
   EVENTS,
   GAME_STATUSES,
+  localStorageKeys,
   MOVING_DIRECTIONS,
 } from "../constants/constants.js";
 
@@ -8,10 +9,10 @@ const _state = {
   gameStatus: GAME_STATUSES.SETTINGS,
   settings: {
     gridSize: {
-      rowsCount: 4,
-      columnsCount: 4,
+      rowsCount: _defineGridRows(),
+      columnsCount: _defineGridColumns(),
     },
-    googleJumpInterval: 1000,
+    googleJumpInterval: 99999000,
     pointsToLose: 5,
     pointsToWin: 3,
   },
@@ -81,6 +82,16 @@ const _checkIsCellHasNoPlayer = (playerPosition) => {
       playerPosition.x === position.x && playerPosition.y === position.y
   );
 };
+
+function _defineGridRows() {
+  const rows = localStorage.getItem(localStorageKeys.GRID_ROWS);
+  return rows ? Number(rows) : 4;
+}
+
+function _defineGridColumns() {
+  const columns = localStorage.getItem(localStorageKeys.GRID_COLUMNS);
+  return columns ? Number(columns) : 4;
+}
 
 const _jumpGoogleToNewPosition = () => {
   const newPosition = { x: null, y: null };
@@ -240,6 +251,25 @@ export const movePlayer = async (playerNumber, direction) => {
     oldPosition,
     newPosition: playerPositionForChange,
   });
+};
+
+export const setPointsQuontity = (pointsType, value) => {
+  _state.settings[pointsType] = Number(value);
+
+  if (pointsType === "pointsToLose") {
+    localStorage.setItem(localStorageKeys.LOSE_POINTS, value);
+  }
+
+  if (pointsType === "pointsToWin") {
+    localStorage.setItem(localStorageKeys.WIN_POINTS, value);
+  }
+};
+
+export const setGridSize = (values) => {
+  _state.settings.gridSize.rowsCount = Number(values[0]);
+  _state.settings.gridSize.columnsCount = Number(values[1]);
+  localStorage.setItem(localStorageKeys.GRID_ROWS, values[0]);
+  localStorage.setItem(localStorageKeys.GRID_COLUMNS, values[1]);
 };
 
 // GETTERS

@@ -32,3 +32,13 @@ export const MOVING_ATTRIBUTES = {
   KeyW: [2, MOVING_DIRECTIONS.UP],
   KeyS: [2, MOVING_DIRECTIONS.DOWN],
 };
+
+export const GRID_SIZES = ["4,4", "9,9", "16,16"];
+export const GAME_POINTS = ["5", "10", "15", "20", "25", "30", "35"];
+
+export const localStorageKeys = {
+  GRID_ROWS: "GRID_ROWS",
+  GRID_COLUMNS: "GRID_COLUMNS",
+  WIN_POINTS: "WIN_POINTS",
+  LOSE_POINTS: "LOSE_POINTS",
+};

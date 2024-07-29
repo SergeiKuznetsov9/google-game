@@ -12,6 +12,7 @@ export const AppComponent = () => {
   const localState = { prevGameStatus: null, cleanupFunctions: [] };
 
   const element = document.createElement("div");
+  element.classList.add('appComponent')
 
   AudioComponent();
 

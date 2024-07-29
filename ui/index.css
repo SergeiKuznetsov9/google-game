@@ -1,2 +1,21 @@
 @import url(./components/ResultPanel/ResultPanel.styles.css);
+@import url(./components/Settings/Setting.styles.css);
 @import url(./components/Grid/Grid.styles.css);
+@import url(./components/Start/Start.styles.css);
+@import url(./components/App.styles.css);
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#root {
+    background-color: #162a56;
+    min-height: 100vh;
+    height: 100vh;
+    padding: 12px 32px;
+    max-width: 980px;
+    margin-left: auto;
+    margin-right: auto;
+}
