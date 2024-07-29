@@ -11,7 +11,7 @@ const _state = {
       rowsCount: 4,
       columnsCount: 4,
     },
-    googleJumpInterval: 5000,
+    googleJumpInterval: 1000,
     pointsToLose: 5,
     pointsToWin: 3,
   },
@@ -54,6 +54,34 @@ const _notifyObservers = (name, payload = {}) => {
 const _generateIntegerNumber = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
 };
+
+const _getPlayerIndexByNumber = (playerNumber) => {
+  const playerIndex = playerNumber - 1;
+
+  if (playerIndex < 0 || playerIndex > _state.points.players.length - 1) {
+    throw new Error("Incorrect player number");
+  }
+
+  return playerIndex;
+};
+
+const _isPositionsMatches = (position1, position2) =>
+  position1.x === position2.x && position1.y === position2.y;
+
+const _checkPositionWithinGrid = (playerPosition) =>
+  playerPosition.x >= 0 &&
+  playerPosition.x < _state.settings.gridSize.columnsCount &&
+  playerPosition.y >= 0 &&
+  playerPosition.y < _state.settings.gridSize.rowsCount;
+
+const _checkIsCellHasNoPlayer = (playerPosition) => {
+  const playersPositions = _state.positions.players;
+  return !playersPositions.some(
+    (position) =>
+      playerPosition.x === position.x && playerPosition.y === position.y
+  );
+};
+
 const _jumpGoogleToNewPosition = () => {
   const newPosition = { x: null, y: null };
 
@@ -71,15 +99,18 @@ const _jumpGoogleToNewPosition = () => {
       _state.settings.gridSize.columnsCount
     );
 
-    isNewPositionMatchWithCurrentGooglePosition =
-      newPosition.x === _state.positions.google.x &&
-      newPosition.y === _state.positions.google.y;
-    isNewPositionMatchWithCurrentPlayer1Position =
-      newPosition.x === _state.positions.players[0].x &&
-      newPosition.y === _state.positions.players[0].y;
-    isNewPositionMatchWithCurrentPlayer2Position =
-      newPosition.x === _state.positions.players[1].x &&
-      newPosition.y === _state.positions.players[1].y;
+    isNewPositionMatchWithCurrentGooglePosition = _isPositionsMatches(
+      newPosition,
+      _state.positions.google
+    );
+    isNewPositionMatchWithCurrentPlayer1Position = _isPositionsMatches(
+      newPosition,
+      _state.positions.players[0]
+    );
+    isNewPositionMatchWithCurrentPlayer2Position = _isPositionsMatches(
+      newPosition,
+      _state.positions.players[1]
+    );
   } while (
     isNewPositionMatchWithCurrentGooglePosition ||
     isNewPositionMatchWithCurrentPlayer1Position ||
@@ -88,6 +119,7 @@ const _jumpGoogleToNewPosition = () => {
 
   _state.positions.google = newPosition;
 };
+
 const _catchGoogle = (playerNumber) => {
   const playerIndex = _getPlayerIndexByNumber(playerNumber);
   _state.points.players[playerIndex]++;
@@ -158,83 +190,59 @@ export const movePlayer = async (playerNumber, direction) => {
   }
   const playerIndex = _getPlayerIndexByNumber(playerNumber);
 
-  const playerPosition = { ..._state.positions.players[playerIndex] };
+  const oldPosition = { ..._state.positions.players[playerIndex] };
+  const playerPositionForChange = { ..._state.positions.players[playerIndex] };
 
   switch (direction) {
     case MOVING_DIRECTIONS.UP:
-      playerPosition.y--;
+      playerPositionForChange.y--;
       break;
 
     case MOVING_DIRECTIONS.DOWN:
-      playerPosition.y++;
+      playerPositionForChange.y++;
       break;
 
     case MOVING_DIRECTIONS.LEFT:
-      playerPosition.x--;
+      playerPositionForChange.x--;
       break;
 
     case MOVING_DIRECTIONS.RIGHT:
-      playerPosition.x++;
+      playerPositionForChange.x++;
       break;
 
     default:
       break;
   }
 
-  const isValidPosition = _checkValidPosition(playerPosition);
-  if (!isValidPosition) {
+  const isPositionWithinGrid = _checkPositionWithinGrid(
+    playerPositionForChange
+  );
+  if (!isPositionWithinGrid) {
     return;
   }
 
-  const isEmptyCell = _checkCellEmpty(playerPosition);
-  if (!isEmptyCell) {
+  const isCellHasNoPlayer = _checkIsCellHasNoPlayer(playerPositionForChange);
+  if (!isCellHasNoPlayer) {
     return;
   }
 
-  const isCellWithGoogle = _checkIsCellWithGoogle(playerPosition);
+  const isCellWithGoogle = _isPositionsMatches(
+    playerPositionForChange,
+    _state.positions.google
+  );
   if (isCellWithGoogle) {
     _catchGoogle(playerNumber);
   }
 
-  _state.positions.players[playerIndex] = playerPosition;
+  _state.positions.players[playerIndex] = playerPositionForChange;
+
   _notifyObservers(EVENTS[`PLAYER${playerNumber}_MOVED`], {
-    oldPosition: { ..._state.positions.players[playerIndex] },
-    newPosition: playerPosition,
+    oldPosition,
+    newPosition: playerPositionForChange,
   });
 };
 
 // GETTERS
-const _checkIsCellWithGoogle = (playerPosition) => {
-  const googlePosition = _state.positions.google;
-  return (
-    (playerPosition.x === googlePosition.x) &
-    (playerPosition.y === googlePosition.y)
-  );
-};
-
-const _checkCellEmpty = (playerPosition) => {
-  const playersPositions = _state.positions.players;
-  return !playersPositions.some(
-    (position) =>
-      playerPosition.x === position.x && playerPosition.y === position.y
-  );
-};
-
-const _checkValidPosition = (playerPosition) =>
-  playerPosition.x >= 0 &&
-  playerPosition.x < _state.settings.gridSize.columnsCount &&
-  playerPosition.y >= 0 &&
-  playerPosition.y < _state.settings.gridSize.rowsCount;
-
-const _getPlayerIndexByNumber = (playerNumber) => {
-  const playerIndex = playerNumber - 1;
-
-  if (playerIndex < 0 || playerIndex > _state.points.players.length - 1) {
-    throw new Error("Incorrect player number");
-  }
-
-  return playerIndex;
-};
 /**
  * @param {number} playerNumber - one-based index of player
  * @returns {Promise} number of points
@@ -243,11 +251,16 @@ export const getPlayerPoints = async (playerNumber) => {
   const playerIndex = _getPlayerIndexByNumber(playerNumber);
   return _state.points.players[playerIndex];
 };
+
 export const getGridSize = async () => ({ ..._state.settings.gridSize });
+
 export const getGooglePosition = async () => ({ ..._state.positions.google });
+
 export const getPlayerPosition = async (playerNumber) => {
   const playerIndex = _getPlayerIndexByNumber(playerNumber);
   return { ..._state.positions.players[playerIndex] };
 };
+
 export const getGooglePoints = async () => _state.points.google;
+
 export const getGameStatus = async () => _state.gameStatus;

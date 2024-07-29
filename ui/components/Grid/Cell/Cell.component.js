@@ -13,7 +13,11 @@ export const CellComponent = (x, y) => {
   const localState = { renderVersion: 0 };
 
   const observer = (event) => {
-    if (event.name === EVENTS.GOOGLE_JUMPED) {
+    if (
+      [EVENTS.GOOGLE_JUMPED, EVENTS.PLAYER1_MOVED, EVENTS.PLAYER2_MOVED].some(
+        (eventName) => eventName === event.name
+      )
+    ) {
       const { payload } = event;
       const { oldPosition, newPosition } = payload;
       const isNeedRerender =
@@ -22,13 +26,6 @@ export const CellComponent = (x, y) => {
       if (isNeedRerender) {
         render(element, x, y, localState);
       }
-    }
-
-    if (
-      event.name === EVENTS.PLAYER1_MOVED ||
-      event.name === EVENTS.PLAYER2_MOVED
-    ) {
-      render(element, x, y, localState);
     }
   };
   subscribe(observer);
