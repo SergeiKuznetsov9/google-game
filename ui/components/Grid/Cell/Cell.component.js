@@ -22,6 +22,13 @@ export const CellComponent = (x, y) => {
         render(element, x, y);
       }
     }
+
+    if (
+      event.name === EVENTS.PLAYER1_MOVED ||
+      event.name === EVENTS.PLAYER2_MOVED
+    ) {
+      render(element, x, y);
+    }
   };
   subscribe(observer);
 

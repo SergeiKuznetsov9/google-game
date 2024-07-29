@@ -5,6 +5,7 @@ import { LoseComponent } from "./Lose/Lose.component.js";
 import { ResultPanelComponent } from "./ResultPanel/ResultPanel.component.js";
 import { SettingsComponent } from "./Settings/Settings.component.js";
 import { StartComponent } from "./Start/Start.component.js";
+import { WinComponent } from "./Win/Win.component.js";
 
 export const AppComponent = () => {
   const localState = { prevGameStatus: null, cleanupFunctions: [] };
@@ -35,15 +36,13 @@ const render = async (element, localState) => {
   element.innerHTML = "";
 
   switch (gameStatus) {
-    // SETTINGS: 'settings',
-    // WIN: 'win',
     case GAME_STATUSES.IN_PROGRESS:
       const settingsComponent = SettingsComponent();
 
       const resultPanelComponent = ResultPanelComponent();
       localState.cleanupFunctions.push(resultPanelComponent.cleanUp);
 
-      const gridComponent = GridComponent(resultPanelComponent.cleanUp);
+      const gridComponent = GridComponent();
       localState.cleanupFunctions.push(gridComponent.cleanUp);
 
       element.append(
@@ -64,6 +63,13 @@ const render = async (element, localState) => {
       const startComponent = StartComponent();
 
       element.append(settingsComponent.element, startComponent.element);
+      break;
+    }
+
+    case GAME_STATUSES.WIN: {
+      const winComponent = WinComponent();
+
+      element.append(winComponent.element);
       break;
     }
 
