@@ -1,9 +1,14 @@
 import {
   GAME_POINTS,
+  GAME_STATUSES,
   GRID_SIZES,
   localStorageKeys,
 } from "../../../constants/constants.js";
-import { setGridSize, setPointsQuontity } from "../../../core/state-manager.js";
+import {
+  getGameStatus,
+  setGridSize,
+  setPointsQuontity,
+} from "../../../core/state-manager.js";
 
 export const SettingsComponent = () => {
   const element = document.createElement("form");
@@ -15,6 +20,7 @@ export const SettingsComponent = () => {
 };
 
 const render = async (element) => {
+  const gameStatus = await getGameStatus();
   const columnsQuontity = localStorage.getItem(localStorageKeys.GRID_COLUMNS);
   const rowsQuontity = localStorage.getItem(localStorageKeys.GRID_ROWS);
   const winPoints = localStorage.getItem(localStorageKeys.WIN_POINTS);
@@ -41,6 +47,7 @@ const render = async (element) => {
 
   const gridSizeLabel = document.createElement("label");
   const gridSizeSelect = document.createElement("select");
+  gridSizeSelect.disabled = gameStatus === GAME_STATUSES.IN_PROGRESS;
   gridSizeSelect.name = "gridSize";
 
   const gridSizeLabelText = document.createElement("span");
@@ -50,6 +57,7 @@ const render = async (element) => {
 
   const pointsToWinLabel = document.createElement("label");
   const pointsToWinSelect = document.createElement("select");
+  pointsToWinSelect.disabled = gameStatus === GAME_STATUSES.IN_PROGRESS;
   pointsToWinSelect.name = "pointsToWin";
   const pointsToWinLabelText = document.createElement("span");
   pointsToWinLabelText.append("Points to win");
@@ -58,6 +66,7 @@ const render = async (element) => {
 
   const pointsToLoseLabel = document.createElement("label");
   const pointsToLoseSelect = document.createElement("select");
+  pointsToLoseSelect.disabled = gameStatus === GAME_STATUSES.IN_PROGRESS;
   pointsToLoseSelect.name = "pointsToLose";
   const pointsToLoseLabelText = document.createElement("span");
   pointsToLoseLabelText.append("Points to lose");

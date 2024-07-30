@@ -1,4 +1,24 @@
 .resultPanelComponent {
-  border: 1px solid black;
-  padding: 3px;
+  background: #ffffff29;
+  border-radius: 30px;
+  height: 68px;
+  padding: 12px 32px;
+  border: 3px solid #ffffff2b;
+  margin-bottom: 36px;
+  color: white;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 32px;
+
+  font-size: 24px;
+}
+
+.resultPanelComponent-player1Block,
+.resultPanelComponent-player2Block,
+.resultPanelComponent-googleBlock {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
