@@ -12,7 +12,7 @@ const _state = {
       rowsCount: _defineGridRows(),
       columnsCount: _defineGridColumns(),
     },
-    googleJumpInterval: 1000,
+    googleJumpInterval: 2000,
     pointsToLose: 120,
     pointsToWin: 50,
   },
@@ -142,13 +142,42 @@ const _catchGoogle = (playerNumber) => {
     _notifyObservers(EVENTS.STATUS_CHANGED);
     clearInterval(googleJumpInterval);
   } else {
+    clearInterval(googleJumpInterval);
     const oldPosition = _state.positions.google;
     _jumpGoogleToNewPosition();
+
+    googleJumpInterval = setInterval(
+      cyclicProcess,
+      _state.settings.googleJumpInterval
+    );
+
     const newPosition = _state.positions.google;
     _notifyObservers(EVENTS.GOOGLE_JUMPED, {
       oldPosition,
       newPosition,
     });
+  }
+};
+
+const cyclicProcess = () => {
+  const oldPosition = _state.positions.google;
+
+  _jumpGoogleToNewPosition();
+
+  _notifyObservers(EVENTS.GOOGLE_JUMPED, {
+    oldPosition,
+    newPosition: _state.positions.google,
+  });
+
+  _notifyObservers(EVENTS.GOOGLE_RAN_AWAY);
+
+  _state.points.google++;
+  _notifyObservers(EVENTS.SCORES_CHANGED);
+
+  if (_state.points.google === _state.settings.pointsToLose) {
+    clearInterval(googleJumpInterval);
+    _state.gameStatus = GAME_STATUSES.LOSE;
+    _notifyObservers(EVENTS.STATUS_CHANGED);
   }
 };
 
@@ -166,27 +195,10 @@ export const start = async () => {
   _state.points.google = 0;
   _state.points.players = [0, 0];
 
-  googleJumpInterval = setInterval(() => {
-    const oldPosition = _state.positions.google;
-
-    _jumpGoogleToNewPosition();
-
-    _notifyObservers(EVENTS.GOOGLE_JUMPED, {
-      oldPosition,
-      newPosition: _state.positions.google,
-    });
-
-    _notifyObservers(EVENTS.GOOGLE_RAN_AWAY);
-
-    _state.points.google++;
-    _notifyObservers(EVENTS.SCORES_CHANGED);
-
-    if (_state.points.google === _state.settings.pointsToLose) {
-      clearInterval(googleJumpInterval);
-      _state.gameStatus = GAME_STATUSES.LOSE;
-      _notifyObservers(EVENTS.STATUS_CHANGED);
-    }
-  }, _state.settings.googleJumpInterval);
+  googleJumpInterval = setInterval(
+    cyclicProcess,
+    _state.settings.googleJumpInterval
+  );
 
   _state.gameStatus = GAME_STATUSES.IN_PROGRESS;
   _notifyObservers(EVENTS.STATUS_CHANGED);
