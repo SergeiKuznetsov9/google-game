@@ -17,7 +17,8 @@
 
 .resultPanelComponent-player1Block,
 .resultPanelComponent-player2Block,
-.resultPanelComponent-googleBlock {
+.resultPanelComponent-googleBlock,
+.resultPanelComponent-timeBlock {
   display: flex;
   align-items: center;
   gap: 16px;

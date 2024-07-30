@@ -12,9 +12,9 @@ const _state = {
       rowsCount: _defineGridRows(),
       columnsCount: _defineGridColumns(),
     },
-    googleJumpInterval: 2000,
-    pointsToLose: 120,
-    pointsToWin: 50,
+    googleJumpInterval: 5000,
+    pointsToLose: 99999,
+    pointsToWin: 30,
   },
   positions: {
     google: {
@@ -29,6 +29,10 @@ const _state = {
   points: {
     google: 0,
     players: [0, 0],
+  },
+  timer: {
+    minutes: 0,
+    hours: 0,
   },
 };
 
@@ -147,7 +151,7 @@ const _catchGoogle = (playerNumber) => {
     _jumpGoogleToNewPosition();
 
     googleJumpInterval = setInterval(
-      cyclicProcess,
+      _googleJumpProcess,
       _state.settings.googleJumpInterval
     );
 
@@ -159,7 +163,7 @@ const _catchGoogle = (playerNumber) => {
   }
 };
 
-const cyclicProcess = () => {
+const _googleJumpProcess = () => {
   const oldPosition = _state.positions.google;
 
   _jumpGoogleToNewPosition();
@@ -181,8 +185,24 @@ const cyclicProcess = () => {
   }
 };
 
+const timerProcess = () => {
+  const currentTimer = _state.timer;
+  if (currentTimer.minutes === 59) {
+    currentTimer.minutes = 0;
+    currentTimer.hours++;
+  } else {
+    currentTimer.minutes++;
+  }
+  _notifyObservers(EVENTS.TIMER_CHANGE);
+
+  if (_state.gameStatus !== GAME_STATUSES.IN_PROGRESS) {
+    clearInterval(timerInterval);
+  }
+};
+
 // INTERFACE ADAPTER
 let googleJumpInterval;
+let timerInterval;
 export const start = async () => {
   _state.positions.players[0] = { x: 0, y: 0 };
   _state.positions.players[1] = {
@@ -194,11 +214,15 @@ export const start = async () => {
 
   _state.points.google = 0;
   _state.points.players = [0, 0];
+  _state.timer.hours = 0;
+  _state.timer.minutes = 0;
 
   googleJumpInterval = setInterval(
-    cyclicProcess,
+    _googleJumpProcess,
     _state.settings.googleJumpInterval
   );
+
+  timerInterval = setInterval(timerProcess, 1000);
 
   _state.gameStatus = GAME_STATUSES.IN_PROGRESS;
   _notifyObservers(EVENTS.STATUS_CHANGED);
@@ -306,3 +330,5 @@ export const getPlayerPosition = async (playerNumber) => {
 export const getGooglePoints = async () => _state.points.google;
 
 export const getGameStatus = async () => _state.gameStatus;
+
+export const getTimer = async () => _state.timer;

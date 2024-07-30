@@ -5,24 +5,39 @@ import {
   subscribe,
   unsubscribe,
 } from "../../../core/state-manager.js";
+import { TimerComponent } from "./Timer/Timer.component.js";
 
 export const ResultPanelComponent = () => {
+  const localState = {
+    cleanupFunctions: [],
+  };
   const element = document.createElement("div");
   element.classList.add("resultPanelComponent");
 
   const observer = (event) => {
     if (event.name === EVENTS.SCORES_CHANGED) {
-      render(element);
+      render(element, localState);
     }
   };
   subscribe(observer);
 
-  render(element);
+  render(element, localState);
 
-  return { element, cleanUp: () => unsubscribe(observer) };
+  return {
+    element,
+    cleanUp: () => {
+      unsubscribe(observer);
+    },
+  };
 };
 
-const render = async (element) => {
+const render = async (element, localState) => {
+  localState.cleanupFunctions.forEach((cf) => cf());
+  localState.cleanupFunctions = [];
+
+  const timerComponent = TimerComponent();
+  localState.cleanupFunctions.push(timerComponent.cleanUp);
+
   element.innerHTML = "";
   const googlePoints = await getGooglePoints();
   const player1Points = await getPlayerPoints(1);
@@ -59,5 +74,10 @@ const render = async (element) => {
   googleBlockScore.append(googlePoints);
   googleBlock.append(googleBlockTitle, googleBlockImg, googleBlockScore);
 
-  element.append(player1Block, player2Block, googleBlock);
+  element.append(
+    player1Block,
+    player2Block,
+    googleBlock,
+    timerComponent.element
+  );
 };
