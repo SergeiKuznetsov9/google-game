@@ -9,7 +9,11 @@ import { StartComponent } from "./Start/Start.component.js";
 import { WinComponent } from "./Win/Win.component.js";
 
 export const AppComponent = () => {
-  const localState = { prevGameStatus: null, cleanupFunctions: [] };
+  const localState = {
+    prevGameStatus: null,
+    cleanupFunctions: [],
+    elementsWithHandlers: [],
+  };
 
   const element = document.createElement("div");
   element.classList.add("appComponent");
@@ -35,6 +39,12 @@ const render = async (element, localState) => {
 
   localState.cleanupFunctions.forEach((fc) => fc());
   localState.cleanupFunctions = [];
+
+  localState.elementsWithHandlers.forEach((elemWithHandler) =>
+    elemWithHandler[0].removeEventListener("click", elemWithHandler[1])
+  );
+  console.log(localState.elementsWithHandlers);
+  localState.elementsWithHandlers = [];
 
   element.innerHTML = "";
 
@@ -64,6 +74,11 @@ const render = async (element, localState) => {
     case GAME_STATUSES.SETTINGS: {
       const settingsComponent = SettingsComponent();
       const startComponent = StartComponent();
+
+      localState.elementsWithHandlers.push([
+        startComponent.localState.renderedElement,
+        startComponent.localState.handler,
+      ]);
 
       element.append(settingsComponent.element, startComponent.element);
       break;

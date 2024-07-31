@@ -12,8 +12,8 @@ const _state = {
       rowsCount: _defineGridRows(),
       columnsCount: _defineGridColumns(),
     },
-    googleJumpInterval: 5000,
-    pointsToLose: 99999,
+    googleJumpInterval: 1000,
+    pointsToLose: 3,
     pointsToWin: 30,
   },
   positions: {

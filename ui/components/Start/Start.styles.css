@@ -4,24 +4,3 @@
     align-items: center;
     justify-content: center;
 }
-
-.startComponent-button {
-    padding: 8px 16px;
-    font-size: 20px;
-    font-weight: 700;
-    color: white;
-    background: #56a055;
-    border-radius: 8px 0;
-    border: none;
-    cursor: pointer;
-    transition-property: background;
-    transition-duration: .3s;
-}
-
-.startComponent-button:hover {
-    background-color: #4b824b;
-}
-
-.startComponent-button:active {
-    background-color: #56a055;
-}
