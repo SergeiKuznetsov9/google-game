@@ -1,5 +1,6 @@
 @import url(./components/ResultPanel/ResultPanel.styles.css);
 @import url(./components/common/Button/Button.styles.css);
+@import url(./components/common/Select/Select.styles.css);
 @import url(./components/Settings/Setting.styles.css);
 @import url(./components/Grid/Grid.styles.css);
 @import url(./components/Start/Start.styles.css);

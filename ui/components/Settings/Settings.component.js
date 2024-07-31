@@ -9,6 +9,7 @@ import {
   setGridSize,
   setPointsQuontity,
 } from "../../../core/state-manager.js";
+import { SelectComponent } from "../common/Select/Select.component.js";
 
 export const SettingsComponent = () => {
   const element = document.createElement("form");
@@ -45,72 +46,47 @@ const render = async (element) => {
     selectedLosePoints = losePoints;
   }
 
-  const gridSizeLabel = document.createElement("label");
-  const gridSizeSelect = document.createElement("select");
-  gridSizeSelect.disabled = gameStatus === GAME_STATUSES.IN_PROGRESS;
-  gridSizeSelect.name = "gridSize";
-
-  const gridSizeLabelText = document.createElement("span");
-  gridSizeLabelText.append("Grid size");
-  gridSizeLabel.append(gridSizeLabelText, gridSizeSelect);
-  gridSizeLabel.classList.add("settingComponent-select");
-
-  const pointsToWinLabel = document.createElement("label");
-  const pointsToWinSelect = document.createElement("select");
-  pointsToWinSelect.disabled = gameStatus === GAME_STATUSES.IN_PROGRESS;
-  pointsToWinSelect.name = "pointsToWin";
-  const pointsToWinLabelText = document.createElement("span");
-  pointsToWinLabelText.append("Points to win");
-  pointsToWinLabel.append(pointsToWinLabelText, pointsToWinSelect);
-  pointsToWinLabel.classList.add("settingComponent-select");
-
-  const pointsToLoseLabel = document.createElement("label");
-  const pointsToLoseSelect = document.createElement("select");
-  pointsToLoseSelect.disabled = gameStatus === GAME_STATUSES.IN_PROGRESS;
-  pointsToLoseSelect.name = "pointsToLose";
-  const pointsToLoseLabelText = document.createElement("span");
-  pointsToLoseLabelText.append("Points to lose");
-  pointsToLoseLabel.append(pointsToLoseLabelText, pointsToLoseSelect);
-  pointsToLoseLabel.classList.add("settingComponent-select");
-
-  GRID_SIZES.forEach((size) => {
-    const gridSizeOption = document.createElement("option");
-    const sizesArray = size.split(",");
-    gridSizeOption.append(`${sizesArray[0]}X${sizesArray[1]}`);
-    gridSizeOption.value = size;
-    gridSizeSelect.append(gridSizeOption);
-  });
-  gridSizeSelect.value = selectedGridSizeValue;
-
-  GAME_POINTS.forEach((pointsQuontity) => {
-    const pointsToWinOption = document.createElement("option");
-    const pointsToLoseOption = document.createElement("option");
-
-    pointsToWinOption.append(pointsQuontity);
-    pointsToLoseOption.append(pointsQuontity);
-
-    pointsToWinOption.value = pointsQuontity;
-    pointsToLoseOption.value = pointsQuontity;
-
-    pointsToWinSelect.append(pointsToWinOption);
-    pointsToLoseSelect.append(pointsToLoseOption);
-  });
-
-  pointsToWinSelect.value = selectedWinPoints;
-  pointsToLoseSelect.value = selectedLosePoints;
-
-  const handler = (event) => {
-    if (event.target.name === "gridSize") {
-      setGridSize(event.target.value.split(","));
-      return;
-    }
-
+  const pointsSelectHandler = (event) => {
     setPointsQuontity(event.target.name, event.target.value);
   };
 
-  gridSizeSelect.addEventListener("change", handler);
-  pointsToWinSelect.addEventListener("change", handler);
-  pointsToLoseSelect.addEventListener("change", handler);
+  const gridSizeSelectHandler = (event) => {
+    setGridSize(event.target.value.split(","));
+  };
 
-  element.append(gridSizeLabel, pointsToWinLabel, pointsToLoseLabel);
+  const gridSizeSelectComponent = SelectComponent(
+    "Grid size",
+    "gridSize",
+    GRID_SIZES.map((size) => {
+      const sizesArray = size.split(",");
+      return { value: size, text: `${sizesArray[0]}X${sizesArray[1]}` };
+    }),
+    selectedGridSizeValue,
+    gameStatus === GAME_STATUSES.IN_PROGRESS,
+    gridSizeSelectHandler
+  );
+
+  const pointsToLoseSelectComponent = SelectComponent(
+    "Points to lose",
+    "pointsToLose",
+    GAME_POINTS.map((point) => ({ value: point, text: point })),
+    selectedLosePoints,
+    gameStatus === GAME_STATUSES.IN_PROGRESS,
+    pointsSelectHandler
+  );
+
+  const pointsToWinSelectComponent = SelectComponent(
+    "Points to win",
+    "pointsToWin",
+    GAME_POINTS.map((point) => ({ value: point, text: point })),
+    selectedWinPoints,
+    gameStatus === GAME_STATUSES.IN_PROGRESS,
+    pointsSelectHandler
+  );
+
+  element.append(
+    gridSizeSelectComponent.element,
+    pointsToWinSelectComponent.element,
+    pointsToLoseSelectComponent.element
+  );
 };
