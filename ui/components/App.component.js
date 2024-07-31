@@ -12,7 +12,7 @@ export const AppComponent = () => {
   const localState = {
     prevGameStatus: null,
     cleanupFunctions: [],
-    elementsWithHandlers: [],
+    cleanHandlers: [],
   };
 
   const element = document.createElement("div");
@@ -40,11 +40,8 @@ const render = async (element, localState) => {
   localState.cleanupFunctions.forEach((fc) => fc());
   localState.cleanupFunctions = [];
 
-  localState.elementsWithHandlers.forEach((elemWithHandler) =>
-    elemWithHandler[0].removeEventListener("click", elemWithHandler[1])
-  );
-  console.log(localState.elementsWithHandlers);
-  localState.elementsWithHandlers = [];
+  localState.cleanHandlers.forEach((cleanHandler) => cleanHandler());
+  localState.cleanHandlers = [];
 
   element.innerHTML = "";
 
@@ -75,10 +72,9 @@ const render = async (element, localState) => {
       const settingsComponent = SettingsComponent();
       const startComponent = StartComponent();
 
-      localState.elementsWithHandlers.push([
-        startComponent.localState.renderedElement,
-        startComponent.localState.handler,
-      ]);
+      localState.cleanHandlers.push(
+        startComponent.localState.buttonCleanHandler
+      );
 
       element.append(settingsComponent.element, startComponent.element);
       break;

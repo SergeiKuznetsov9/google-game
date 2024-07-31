@@ -3,8 +3,7 @@ import { ButtonComponent } from "../common/Button/Button.component.js";
 
 export const StartComponent = () => {
   const localState = {
-    renderedElement: null,
-    handler: null,
+    buttonCleanHandler: null,
   };
 
   const element = document.createElement("div");
@@ -16,16 +15,12 @@ export const StartComponent = () => {
 };
 
 const render = async (element, localState) => {
-  if (localState.renderedElement) {
-    localState.renderedElement.removeEventListener("click", localState.handler);
-  }
-
   const handler = () => {
     start();
   };
   const buttonComponent = ButtonComponent("START GAME", handler);
-  localState.renderedElement = buttonComponent.element;
-  localState.handler = handler;
+
+  localState.buttonCleanHandler = buttonComponent.localState.cleanHandler;
 
   element.append(buttonComponent.element);
 };
