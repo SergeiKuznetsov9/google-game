@@ -13,6 +13,8 @@ export const AppComponent = () => {
     prevGameStatus: null,
     cleanupFunctions: [],
     cleanHandlers: [],
+    startComponentHandlers: [],
+    settingsComponentHandlers: [],
   };
 
   const element = document.createElement("div");
@@ -40,8 +42,10 @@ const render = async (element, localState) => {
   localState.cleanupFunctions.forEach((fc) => fc());
   localState.cleanupFunctions = [];
 
-  localState.cleanHandlers.forEach((cleanHandler) => cleanHandler());
-  localState.cleanHandlers = [];
+  localState.startComponentHandlers.forEach((cleanHandler) => cleanHandler());
+  localState.settingsComponentHandlers.forEach((cleanHandler) =>
+    cleanHandler()
+  );
 
   element.innerHTML = "";
 
@@ -71,10 +75,12 @@ const render = async (element, localState) => {
     case GAME_STATUSES.SETTINGS: {
       const settingsComponent = SettingsComponent();
       const startComponent = StartComponent();
+      localState.startComponentHandlers = [
+        startComponent.localState.buttonCleanHandler,
+      ];
 
-      localState.cleanHandlers.push(
-        startComponent.localState.buttonCleanHandler
-      );
+      localState.settingsComponentHandlers =
+        settingsComponent.localState.cleanHandlers;
 
       element.append(settingsComponent.element, startComponent.element);
       break;

@@ -9,6 +9,7 @@ export const SelectComponent = (
   const localState = {
     cleanHandler: null,
   };
+
   const element = document.createElement("label");
   element.classList.add("selectComponent");
 

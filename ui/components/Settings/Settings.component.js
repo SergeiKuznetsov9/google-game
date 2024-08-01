@@ -12,15 +12,18 @@ import {
 import { SelectComponent } from "../common/Select/Select.component.js";
 
 export const SettingsComponent = () => {
+  const localState = {
+    cleanHandlers: [],
+  };
   const element = document.createElement("form");
   element.classList.add("settingComponent");
 
-  render(element);
+  render(element, localState);
 
-  return { element };
+  return { element, localState };
 };
 
-const render = async (element) => {
+const render = async (element, localState) => {
   const gameStatus = await getGameStatus();
   const columnsQuontity = localStorage.getItem(localStorageKeys.GRID_COLUMNS);
   const rowsQuontity = localStorage.getItem(localStorageKeys.GRID_ROWS);
@@ -65,6 +68,9 @@ const render = async (element) => {
     gameStatus === GAME_STATUSES.IN_PROGRESS,
     gridSizeSelectHandler
   );
+  localState.cleanHandlers.push(
+    gridSizeSelectComponent.localState.cleanHandler
+  );
 
   const pointsToLoseSelectComponent = SelectComponent(
     "Points to lose",
@@ -74,6 +80,9 @@ const render = async (element) => {
     gameStatus === GAME_STATUSES.IN_PROGRESS,
     pointsSelectHandler
   );
+  localState.cleanHandlers.push(
+    pointsToLoseSelectComponent.localState.cleanHandler
+  );
 
   const pointsToWinSelectComponent = SelectComponent(
     "Points to win",
@@ -82,6 +91,9 @@ const render = async (element) => {
     selectedWinPoints,
     gameStatus === GAME_STATUSES.IN_PROGRESS,
     pointsSelectHandler
+  );
+  localState.cleanHandlers.push(
+    pointsToWinSelectComponent.localState.cleanHandler
   );
 
   element.append(
