@@ -1,23 +1,27 @@
 import { playAgain } from "../../../core/state-manager.js";
+import { ButtonComponent } from "../common/Button/Button.component.js";
 
 export const LoseComponent = () => {
+  const localState = {
+    buttonCleanHandler: null,
+  };
+
   const element = document.createElement("div");
 
-  render(element);
+  render(element, localState);
 
-  return { element };
+  return { element, localState };
 };
 
-const render = async (element) => {
+const render = async (element, localState) => {
   const titleElement = document.createElement("h1");
   titleElement.append("YOU LOSE, GOOGLE WIN");
-
   element.append(titleElement);
-  const button = document.createElement("button");
-  button.append("PLAY AGAIN");
-  button.addEventListener("click", () => {
-    playAgain();
-  });
 
-  element.append(button);
+  const buttonHandler = () => playAgain();
+
+  const buttonComponent = ButtonComponent("PLAY AGAIN", buttonHandler);
+  localState.buttonCleanHandler = buttonComponent.localState.cleanHandler;
+
+  element.append(buttonComponent.element);
 };

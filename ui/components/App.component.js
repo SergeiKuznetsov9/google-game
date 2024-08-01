@@ -15,6 +15,8 @@ export const AppComponent = () => {
     cleanHandlers: [],
     startComponentHandlers: [],
     settingsComponentHandlers: [],
+    loseComponentHandlers: [],
+    winComponentHandlers: [],
   };
 
   const element = document.createElement("div");
@@ -41,8 +43,9 @@ const render = async (element, localState) => {
 
   localState.cleanupFunctions.forEach((fc) => fc());
   localState.cleanupFunctions = [];
-
   localState.startComponentHandlers.forEach((cleanHandler) => cleanHandler());
+  localState.loseComponentHandlers.forEach((cleanHandler) => cleanHandler());
+  localState.winComponentHandlers.forEach((cleanHandler) => cleanHandler());
   localState.settingsComponentHandlers.forEach((cleanHandler) =>
     cleanHandler()
   );
@@ -68,6 +71,9 @@ const render = async (element, localState) => {
 
     case GAME_STATUSES.LOSE:
       const loseComponent = LoseComponent();
+      localState.loseComponentHandlers = [
+        loseComponent.localState.buttonCleanHandler,
+      ];
 
       element.append(loseComponent.element);
       break;
@@ -89,6 +95,11 @@ const render = async (element, localState) => {
     case GAME_STATUSES.WIN: {
       const winComponent = WinComponent();
 
+      localState.winComponentHandlers = [
+        winComponent.localState.buttonCleanHandler,
+      ];
+      console.log(winComponent);
+      console.log(winComponent.localState.buttonCleanHandler);
       element.append(winComponent.element);
       break;
     }

@@ -7,14 +7,15 @@ import {
 
 const _state = {
   gameStatus: GAME_STATUSES.SETTINGS,
+  winner: "",
   settings: {
     gridSize: {
       rowsCount: _defineGridRows(),
       columnsCount: _defineGridColumns(),
     },
     googleJumpInterval: 1000,
-    pointsToLose: 3,
-    pointsToWin: 30,
+    pointsToLose: 30,
+    pointsToWin: 1,
   },
   positions: {
     google: {
@@ -143,6 +144,7 @@ const _catchGoogle = (playerNumber) => {
 
   if (_state.points.players[playerIndex] === _state.settings.pointsToWin) {
     _state.gameStatus = GAME_STATUSES.WIN;
+    _state.winner = `Player ${playerNumber}`;
     _notifyObservers(EVENTS.STATUS_CHANGED);
     clearInterval(googleJumpInterval);
   } else {
@@ -203,12 +205,14 @@ const timerProcess = () => {
 // INTERFACE ADAPTER
 let googleJumpInterval;
 let timerInterval;
+
 export const start = async () => {
   _state.positions.players[0] = { x: 0, y: 0 };
   _state.positions.players[1] = {
     x: _state.settings.gridSize.columnsCount - 1,
     y: _state.settings.gridSize.rowsCount - 1,
   };
+  _state.winner = "";
 
   _jumpGoogleToNewPosition();
 
@@ -227,10 +231,12 @@ export const start = async () => {
   _state.gameStatus = GAME_STATUSES.IN_PROGRESS;
   _notifyObservers(EVENTS.STATUS_CHANGED);
 };
+
 export const playAgain = async () => {
   _state.gameStatus = GAME_STATUSES.SETTINGS;
   _notifyObservers(EVENTS.STATUS_CHANGED);
 };
+
 export const movePlayer = async (playerNumber, direction) => {
   if (_state.gameStatus !== GAME_STATUSES.IN_PROGRESS) {
     return;
@@ -332,3 +338,5 @@ export const getGooglePoints = async () => _state.points.google;
 export const getGameStatus = async () => _state.gameStatus;
 
 export const getTimer = async () => _state.timer;
+
+export const getWinner = async () => _state.winner;
