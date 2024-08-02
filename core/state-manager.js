@@ -16,6 +16,7 @@ const _state = {
     googleJumpInterval: 1500,
     pointsToLose: 30,
     pointsToWin: 1,
+    isMusicOn: _defineIsMusicOn(),
   },
   positions: {
     google: {
@@ -98,6 +99,11 @@ function _defineGridColumns() {
   return columns ? Number(columns) : 4;
 }
 
+function _defineIsMusicOn() {
+  const isMusicOn = localStorage.getItem(localStorageKeys.IS_MUSIC_ON);
+  return isMusicOn === "true";
+}
+
 const _jumpGoogleToNewPosition = () => {
   const newPosition = { x: null, y: null };
 
@@ -140,7 +146,7 @@ const _catchGoogle = (playerNumber) => {
   const playerIndex = _getPlayerIndexByNumber(playerNumber);
   _state.points.players[playerIndex]++;
   _notifyObservers(EVENTS.SCORES_CHANGED);
-  _notifyObservers(EVENTS.GOOGLE_CAUGHT);
+  _notifyObservers(EVENTS.GOOGLE_CAUGHT, _state.settings.isMusicOn);
 
   if (_state.points.players[playerIndex] === _state.settings.pointsToWin) {
     _state.gameStatus = GAME_STATUSES.WIN;
@@ -175,7 +181,7 @@ const _googleJumpProcess = () => {
     newPosition: _state.positions.google,
   });
 
-  _notifyObservers(EVENTS.GOOGLE_RAN_AWAY);
+  _notifyObservers(EVENTS.GOOGLE_RAN_AWAY, _state.settings.isMusicOn);
 
   _state.points.google++;
   _notifyObservers(EVENTS.SCORES_CHANGED);
@@ -314,6 +320,11 @@ export const setGridSize = (values) => {
   localStorage.setItem(localStorageKeys.GRID_COLUMNS, values[1]);
 };
 
+export const setIsMusicOn = (value) => {
+  _state.settings.isMusicOn = value;
+  localStorage.setItem(localStorageKeys.IS_MUSIC_ON, String(value));
+};
+
 // GETTERS
 /**
  * @param {number} playerNumber - one-based index of player
@@ -340,3 +351,5 @@ export const getGameStatus = async () => _state.gameStatus;
 export const getTimer = async () => _state.timer;
 
 export const getWinner = async () => _state.winner;
+
+export const getIsMusicOn = async () => _state.settings.isMusicOn;

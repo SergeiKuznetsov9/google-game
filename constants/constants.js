@@ -42,4 +42,5 @@ export const localStorageKeys = {
   GRID_COLUMNS: "GRID_COLUMNS",
   WIN_POINTS: "WIN_POINTS",
   LOSE_POINTS: "LOSE_POINTS",
+  IS_MUSIC_ON: "IS_MUSIC_ON",
 };

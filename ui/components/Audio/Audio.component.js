@@ -6,10 +6,10 @@ export const AudioComponent = () => {
   const missAudio = new Audio("assets/sounds/miss.mp3");
 
   subscribe((event) => {
-    if (event.name === EVENTS.GOOGLE_RAN_AWAY) {
+    if (event.name === EVENTS.GOOGLE_RAN_AWAY && event.payload) {
       missAudio.play();
     }
-    if (event.name === EVENTS.GOOGLE_CAUGHT) {
+    if (event.name === EVENTS.GOOGLE_CAUGHT && event.payload) {
       catchAudio.currentTime = 0;
       catchAudio.play();
     }

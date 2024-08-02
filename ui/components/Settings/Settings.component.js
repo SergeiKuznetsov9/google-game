@@ -6,10 +6,13 @@ import {
 } from "../../../constants/constants.js";
 import {
   getGameStatus,
+  getIsMusicOn,
   setGridSize,
+  setIsMusicOn,
   setPointsQuontity,
 } from "../../../core/state-manager.js";
 import { SelectComponent } from "../common/Select/Select.component.js";
+import { SwitcherComponent } from "../common/Switcher/Switcher.component.js";
 
 export const SettingsComponent = () => {
   const localState = {
@@ -96,9 +99,24 @@ const render = async (element, localState) => {
     pointsToWinSelectComponent.localState.cleanHandler
   );
 
+  //----------------------------------------------------------------------
+
+  const soundSwitcherHandler = (event) => {
+    setIsMusicOn(event.target.checked);
+  };
+  const initialValue = await getIsMusicOn();
+  const soundSwitcherComponent = SwitcherComponent(
+    "Sound",
+    soundSwitcherHandler,
+    initialValue
+  );
+  localState.cleanHandlers.push(soundSwitcherComponent.localState.cleanHandler);
+
+  //----------------------------------------------------------------------
   element.append(
     gridSizeSelectComponent.element,
     pointsToWinSelectComponent.element,
-    pointsToLoseSelectComponent.element
+    pointsToLoseSelectComponent.element,
+    soundSwitcherComponent.element
   );
 };
