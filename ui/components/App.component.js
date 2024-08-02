@@ -94,12 +94,8 @@ const render = async (element, localState) => {
 
     case GAME_STATUSES.WIN: {
       const winComponent = WinComponent();
-
-      localState.winComponentHandlers = [
-        winComponent.localState.buttonCleanHandler,
-      ];
-      console.log(winComponent);
-      console.log(winComponent.localState.buttonCleanHandler);
+      localState.winComponentHandlers =
+        winComponent.localState.buttonCleanHandler;
       element.append(winComponent.element);
       break;
     }

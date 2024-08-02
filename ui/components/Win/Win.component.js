@@ -2,9 +2,8 @@ import { getWinner, playAgain } from "../../../core/state-manager.js";
 import { ButtonComponent } from "../common/Button/Button.component.js";
 
 export const WinComponent = () => {
-  console.log("WinComponent Render");
   const localState = {
-    buttonCleanHandler: "null",
+    buttonCleanHandler: [],
   };
 
   const element = document.createElement("div");
@@ -23,7 +22,8 @@ const render = async (element, localState) => {
   const buttonHandler = () => playAgain();
 
   const buttonComponent = ButtonComponent("PLAY AGAIN", buttonHandler);
-  localState.buttonCleanHandler = buttonComponent.localState.cleanHandler;
-  console.log(localState);
+  localState.buttonCleanHandler.length = 0;
+  localState.buttonCleanHandler.push(buttonComponent.localState.cleanHandler);
+
   element.append(buttonComponent.element);
 };
