@@ -33,8 +33,8 @@ const _state = {
     players: [0, 0],
   },
   timer: {
+    seconds: 0,
     minutes: 0,
-    hours: 0,
   },
 };
 
@@ -195,11 +195,11 @@ const _googleJumpProcess = () => {
 
 const timerProcess = () => {
   const currentTimer = _state.timer;
-  if (currentTimer.minutes === 59) {
-    currentTimer.minutes = 0;
-    currentTimer.hours++;
-  } else {
+  if (currentTimer.seconds === 59) {
+    currentTimer.seconds = 0;
     currentTimer.minutes++;
+  } else {
+    currentTimer.seconds++;
   }
   _notifyObservers(EVENTS.TIMER_CHANGE);
 
@@ -224,8 +224,8 @@ export const start = async () => {
 
   _state.points.google = 0;
   _state.points.players = [0, 0];
-  _state.timer.hours = 0;
   _state.timer.minutes = 0;
+  _state.timer.seconds = 0;
 
   googleJumpInterval = setInterval(
     _googleJumpProcess,
@@ -351,5 +351,7 @@ export const getGameStatus = async () => _state.gameStatus;
 export const getTimer = async () => _state.timer;
 
 export const getWinner = async () => _state.winner;
+
+export const getPointsQuontity = async () => _state.settings.pointsToWin;
 
 export const getIsMusicOn = async () => _state.settings.isMusicOn;

@@ -6,8 +6,14 @@ import {
 } from "../../../../core/state-manager.js";
 
 const getTime = (timer) => {
+  let secondsString;
   let minutesString;
-  let hoursString;
+
+  if (timer.seconds <= 9) {
+    secondsString = `0${timer.seconds}`;
+  } else {
+    secondsString = String(timer.seconds);
+  }
 
   if (timer.minutes <= 9) {
     minutesString = `0${timer.minutes}`;
@@ -15,13 +21,7 @@ const getTime = (timer) => {
     minutesString = String(timer.minutes);
   }
 
-  if (timer.hours <= 9) {
-    hoursString = `0${timer.hours}`;
-  } else {
-    hoursString = String(timer.hours);
-  }
-
-  return `${hoursString}:${minutesString}`;
+  return `${minutesString}:${secondsString}`;
 };
 
 export const TimerComponent = () => {
