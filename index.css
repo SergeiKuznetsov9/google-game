@@ -1,0 +1,29 @@
+@import url(./ui/components/ResultPanel/ResultPanel.styles.css);
+@import url(./ui/components/common/Button/Button.styles.css);
+@import url(./ui/components/common/Select/Select.styles.css);
+@import url(./ui/components/common/Switcher/Switcher.styles.css);
+@import url(./ui/components/Settings/Setting.styles.css);
+@import url(./ui/components/Grid/Grid.styles.css);
+@import url(./ui/components/Start/Start.styles.css);
+@import url(./ui/components/Win/Win.styles.css);
+@import url(./ui/components/Lose/Lose.styles.css);
+@import url(./ui/components/App.styles.css);
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #162a56;
+}
+
+#root {
+  min-height: 100vh;
+  height: 100vh;
+  padding: 12px 32px;
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
+}

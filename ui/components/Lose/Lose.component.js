@@ -33,7 +33,7 @@ const render = async (element, localState) => {
   loseHeader.classList.add("loseComponent-header");
 
   const crownImg = document.createElement("img");
-  crownImg.src = "assets/images/crown.png";
+  crownImg.src = "ui/assets/images/crown.png";
   loseHeader.append(crownImg);
 
   const loseBody = document.createElement("div");

@@ -36,7 +36,7 @@ const render = async (element, localState) => {
   winHeader.classList.add("winComponent-header");
 
   const crownImg = document.createElement("img");
-  crownImg.src = "assets/images/crown.png";
+  crownImg.src = "ui/assets/images/crown.png";
   winHeader.append(crownImg);
 
   const winBody = document.createElement("div");
