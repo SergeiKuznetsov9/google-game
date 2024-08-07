@@ -5,5 +5,5 @@ export const PlayerComponent = (playerNumber) => {
 };
 
 const render = async (element, playerNumber) => {
-  element.src = `assets/images/player${playerNumber}.png`;
+  element.src = `ui/assets/images/player${playerNumber}.png`;
 };

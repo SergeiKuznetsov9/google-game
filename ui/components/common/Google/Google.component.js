@@ -5,5 +5,5 @@ export const GoogleComponent = () => {
 };
 
 const render = async (element) => {
-  element.src = "assets/images/google.png";
+  element.src = "ui/assets/images/google.png";
 };
