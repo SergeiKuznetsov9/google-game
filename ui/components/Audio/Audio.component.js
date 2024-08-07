@@ -7,6 +7,7 @@ export const AudioComponent = () => {
 
   subscribe((event) => {
     if (event.name === EVENTS.GOOGLE_RAN_AWAY && event.payload) {
+      missAudio.currentTime = 0;
       missAudio.play();
     }
     if (event.name === EVENTS.GOOGLE_CAUGHT && event.payload) {
