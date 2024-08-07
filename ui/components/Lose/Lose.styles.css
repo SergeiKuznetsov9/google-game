@@ -1,0 +1,85 @@
+.loseComponent {
+    margin: auto;
+}
+
+.loseComponent-container {
+    position: relative;
+    width: 240px;
+    height: 380px;
+}
+
+.loseComponent-header {
+    padding: 32px;
+    background-color: #8080806b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 110px;
+    height: 110px;
+    position: absolute;
+    left: 67px;
+    z-index: 100;
+    border: solid 2px #969cab;
+    top: 5px;
+}
+
+.loseComponent-hider {
+    position: absolute;
+    height: 80px;
+    width: 100%;
+    z-index: 10;
+    background-color: #162a56;
+}
+
+.loseComponent-header>img {
+    width: 100%;
+}
+
+.loseComponent-body {
+    position: absolute;
+    width: 100%;
+    height: 300px;
+    bottom: 0;
+    border: solid 2px #969cab;
+    background-color: #8080806b;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    padding: 50px 24px 24px 24px;
+}
+
+.loseComponent-body::before {
+    content: '';
+    width: 120px;
+    height: 120px;
+    border-radius: 0 0 50% 50%;
+    position: absolute;
+    bottom: 255px;
+    left: 58px;
+    border: solid 2px #969cab;
+    background-color: #162a56;
+    border-top: none;
+}
+
+.loseComponent-body>h1 {
+    margin-bottom: 24px;
+}
+
+.loseBodyPlayer {
+    margin-bottom: 16px;
+}
+
+.loseBodyPoints,
+.loseBodyTime {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.loseBodyTime {
+    margin-bottom: 36px;
+}

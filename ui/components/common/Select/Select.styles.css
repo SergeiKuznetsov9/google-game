@@ -1,0 +1,16 @@
+.selectComponent {
+  display: flex;
+  flex-direction: column;
+  min-width: 116px;
+  width: 28%;
+  gap: 4px;
+  color: white;
+}
+
+.selectComponent select {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  height: 30px;
+  border: none;
+}
