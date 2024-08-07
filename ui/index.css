@@ -15,8 +15,11 @@
   box-sizing: border-box;
 }
 
-#root {
+body {
   background-color: #162a56;
+}
+
+#root {
   min-height: 100vh;
   height: 100vh;
   padding: 12px 32px;
