@@ -1,5 +1,5 @@
 import {
-  getPointsQuontity,
+  getPointsToWin,
   getTimer,
   getWinner,
   playAgain,
@@ -24,7 +24,7 @@ const render = async (element, localState) => {
 
   const time = await getTimer();
 
-  const playerPoints = await getPointsQuontity();
+  const playerPoints = await getPointsToWin();
 
   const winContainer = document.createElement("div");
   winContainer.classList.add("winComponent-container");

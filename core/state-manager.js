@@ -13,8 +13,8 @@ const _state = {
       rowsCount: _defineGridRows(),
       columnsCount: _defineGridColumns(),
     },
-    googleJumpInterval: 1500,
-    pointsToLose: 30,
+    googleJumpInterval: 500,
+    pointsToLose: 1000,
     pointsToWin: 1,
     isMusicOn: _defineIsMusicOn(),
   },
@@ -352,6 +352,8 @@ export const getTimer = async () => _state.timer;
 
 export const getWinner = async () => _state.winner;
 
-export const getPointsQuontity = async () => _state.settings.pointsToWin;
+export const getPointsToWin = async () => _state.settings.pointsToWin;
+
+export const getPointsToLose = async () => _state.settings.pointsToLose;
 
 export const getIsMusicOn = async () => _state.settings.isMusicOn;

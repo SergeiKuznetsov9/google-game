@@ -69,15 +69,6 @@ const render = async (element, localState) => {
       );
       break;
 
-    case GAME_STATUSES.LOSE:
-      const loseComponent = LoseComponent();
-      localState.loseComponentHandlers = [
-        loseComponent.localState.buttonCleanHandler,
-      ];
-
-      element.append(loseComponent.element);
-      break;
-
     case GAME_STATUSES.SETTINGS: {
       const settingsComponent = SettingsComponent();
       const startComponent = StartComponent();
@@ -91,6 +82,14 @@ const render = async (element, localState) => {
       element.append(settingsComponent.element, startComponent.element);
       break;
     }
+
+    case GAME_STATUSES.LOSE:
+      const loseComponent = LoseComponent();
+      localState.loseComponentHandlers =
+        loseComponent.localState.buttonCleanHandler;
+
+      element.append(loseComponent.element);
+      break;
 
     case GAME_STATUSES.WIN: {
       const winComponent = WinComponent();

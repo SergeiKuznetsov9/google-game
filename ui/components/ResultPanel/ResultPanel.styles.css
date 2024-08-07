@@ -23,3 +23,16 @@
   align-items: center;
   gap: 16px;
 }
+
+.resultPanelComponent-player1Block,
+.resultPanelComponent-player2Block {
+  width: 180px;
+}
+
+.resultPanelComponent-googleBlock {
+  width: 190px;
+}
+
+.resultPanelComponent-timeBlock {
+  width: 130px;
+}

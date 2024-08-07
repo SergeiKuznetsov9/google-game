@@ -6,6 +6,7 @@
 @import url(./components/Grid/Grid.styles.css);
 @import url(./components/Start/Start.styles.css);
 @import url(./components/Win/Win.styles.css);
+@import url(./components/Lose/Lose.styles.css);
 @import url(./components/App.styles.css);
 
 * {
